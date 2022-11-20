@@ -4,4 +4,13 @@
     <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Grpc.AspNetCore" Version="2.50.0" />
+    <PackageReference Include="Grpc.AspNetCore.Server.Reflection" Version="2.50.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="./Protos/doomsday_clock.proto" GrpcServices="Server" />
+  </ItemGroup>
+
 </Project>

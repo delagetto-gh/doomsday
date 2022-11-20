@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package doomsday; 
+/* This becomes the c# namespace (and is pascal-cased when generated) 
+   if the 'option csharp_namespace = xxx' option is ommitted. */
+
+import "google/protobuf/timestamp.proto";
+
+service DoomsdayClock {
+    rpc GetCountdown(GetCountdownRequest) returns (stream GetCountdownResponse);
+    rpc Ping(PingRequest) returns (PingResponse);
+}
+
+message GetCountdownRequest {
+}
+
+message GetCountdownResponse {
+
+    google.protobuf.Timestamp time = 1;
+
+    /* By convention, imported proto types (like timestamp.proto), when USED, are 
+       declared using a sytax conversion
+         1) slashes (/) => period (.)
+         2) the type name is pascal-cased (/timestamp.proto) => .Timestamp.proto
+    */
+}
+
+message PingRequest {
+}
+
+message PingResponse {
+    string value = 1;
+}

@@ -25,14 +25,18 @@ public class DoomsdayClockService : Doomsday.DoomsdayClock.DoomsdayClockBase
 
     public override async Task GetCountdown(GetCountdownRequest request, IServerStreamWriter<GetCountdownResponse> responseStream, ServerCallContext context)
     {
-        var stoppingtoken = context.CancellationToken;
-        while (await _timer.WaitForNextTickAsync(stoppingtoken))
+        //map public contract => application contract (could use AutoMapper ACL)
+        var useCase = new Countdown.UseCase();
+
+        // execute app  (handle usecase) & get response
+        await foreach (var time in _appService.Stream(useCase, context.CancellationToken))
         {
-            var now = DateTimeOffset.Now;
+            //map app response to public contract (use AutoMapper ACL)
             var response = new GetCountdownResponse
             {
-                Time = Timestamp.FromDateTimeOffset(now)
+                Time = Timestamp.FromDateTimeOffset(time)
             };
+
             await responseStream.WriteAsync(response);
         }
     }
@@ -43,12 +47,12 @@ public class DoomsdayClockService : Doomsday.DoomsdayClock.DoomsdayClockBase
         var useCase = new Ping.UseCase();
 
         // execute app  (handle usecase) & get response
-        var useCaseResult = await _appService.Handle(useCase);
+        var useCaseResult = await _appService.Handle(useCase, context.CancellationToken);
 
         //map app response to public contract (use AutoMapper ACL)
         var response = new PingResponse
         {
-            Value = useCaseResult.Value
+            Value = useCaseResult
         };
 
         //return the contract response;

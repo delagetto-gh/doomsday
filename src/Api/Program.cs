@@ -7,8 +7,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddGrpc();
 builder.Services.AddGrpcReflection();
-builder.Services.AddScoped<IApplicationService, AppServiceHomebrewed>();
-builder.Services.AddScoped<IUseCaseHandlerMarker, PingUseCaseHandler>();
+builder.Services.AddScoped<IApplicationService, AppServiceHomebrew>();
+builder.Services.AddScoped<IUseCaseHandler, PingUseCaseHandler>();
+builder.Services.AddScoped<IUseCaseHandler, CountdownUseCaseHandler>();
 
 var app = builder.Build();
 

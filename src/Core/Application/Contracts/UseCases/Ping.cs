@@ -4,13 +4,8 @@ namespace Core.Application.Contracts.UseCases;
 
 public static class Ping
 {
-    public class UseCase : IUseCase<UseCaseResult>
+    public class UseCase : IUseCase<string>
     {
 
-    }
-
-    public class UseCaseResult : IUseCaseResult
-    {
-        public string Value { get; set; }
     }
 }

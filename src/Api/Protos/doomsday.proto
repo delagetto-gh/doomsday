@@ -2,10 +2,14 @@ syntax = "proto3";
 
 package doomsday; 
 /* This becomes the c# namespace (and is pascal-cased when generated) 
-   if the 'option csharp_namespace = xxx' option is ommitted. */
+   if the 'option csharp_namespace = xxx' option is ommitted. 
+   
+   Note also, this becomes part of the ROUTE/URL = grpc://{doomsday}.{DoomsdayClock}/{endpointName}
+   */
 
 import "google/protobuf/timestamp.proto";
 
+/* the service name becomes part of the ROUTE/URL also (see above) */
 service DoomsdayClock {
     rpc GetCountdown(GetCountdownRequest) returns (stream GetCountdownResponse);
     rpc Ping(PingRequest) returns (PingResponse);

@@ -1,5 +1,3 @@
-using System;
-using System.Threading;
 using System.Threading.Tasks;
 using CleanArch.Abstractions;
 using Core.Application.Contracts.UseCases;
@@ -14,13 +12,11 @@ namespace Api.Services;
 /// </summary>
 public class DoomsdayClockService : Doomsday.DoomsdayClock.DoomsdayClockBase
 {
-    private readonly PeriodicTimer _timer;
-    private readonly IApplicationService _appService;
+    private readonly IApplicationApi _appApi;
 
-    public DoomsdayClockService(IApplicationService appService)
+    public DoomsdayClockService(IApplicationApi appApi)
     {
-        _appService = appService;
-        _timer = new PeriodicTimer(TimeSpan.FromSeconds(1));
+        _appApi = appApi;
     }
 
     public override async Task GetCountdown(GetCountdownRequest request, IServerStreamWriter<GetCountdownResponse> responseStream, ServerCallContext context)
@@ -29,7 +25,7 @@ public class DoomsdayClockService : Doomsday.DoomsdayClock.DoomsdayClockBase
         var useCase = new Countdown.UseCase();
 
         // execute app  (handle usecase) & get response
-        await foreach (var time in _appService.Stream(useCase, context.CancellationToken))
+        await foreach (var time in _appApi.Stream(useCase, context.CancellationToken))
         {
             //map app response to public contract (use AutoMapper ACL)
             var response = new GetCountdownResponse
@@ -47,7 +43,7 @@ public class DoomsdayClockService : Doomsday.DoomsdayClock.DoomsdayClockBase
         var useCase = new Ping.UseCase();
 
         // execute app  (handle usecase) & get response
-        var useCaseResult = await _appService.Handle(useCase, context.CancellationToken);
+        var useCaseResult = await _appApi.Handle(useCase, context.CancellationToken);
 
         //map app response to public contract (use AutoMapper ACL)
         var response = new PingResponse

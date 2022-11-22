@@ -9,11 +9,11 @@ namespace CleanArch.Abstractions;
 // app service which just relies on DI -
 // does NOT take dep on IServiceProvider (service-locator anti-pattern )
 // does NOT use mediatR (for scenarios where using 3rd party libs are not allowed)
-public partial class AppServiceHomebrew : IApplicationService
+public partial class AppApiHomebrew : IApplicationApi
 {
     private readonly IEnumerable<IUseCaseHandler> _allUseCaseHandlers;
 
-    public AppServiceHomebrew(IEnumerable<IUseCaseHandler> allUseCaseHandlers)
+    public AppApiHomebrew(IEnumerable<IUseCaseHandler> allUseCaseHandlers)
     {
         _allUseCaseHandlers = allUseCaseHandlers;
     }
